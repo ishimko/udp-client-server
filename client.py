@@ -7,7 +7,7 @@ from threading import Thread
 
 class UDPClient(Thread):
     UDP_IP = "192.168.56.1"
-    UDP_PORT = 8080
+    UDP_PORT = 55555
 
     MSG_SEND_TIME = 0
     MSG_BROADCAST_TIME = 1

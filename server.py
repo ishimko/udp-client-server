@@ -7,7 +7,7 @@ from threading import Thread
 
 class UDPServer(Thread):
     UDP_IP = "192.168.56.1"
-    UDP_PORT = 8080
+    UDP_PORT = 55555
     BROADCAST_ADDRESS = "192.168.56.255"
 
     BUFFER_SIZE = 512
