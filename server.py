@@ -1,50 +1,50 @@
+#!/usr/bin/python3
+
 import time
-from socket import *
+import socket
 from threading import Thread
-from threading import Lock
 
 
-class udpListener(Thread):
+class UDPServer(Thread):
+    UDP_IP = "192.168.56.1"
+    UDP_PORT = 8080
+    BROADCAST_ADDRESS = "192.168.56.255"
+
+    MSG_SEND_TIME = 0
+    MSG_BROADCAST_TIME = 1
+
     def __init__(self):
         Thread.__init__(self)
-        self.l = []
+        self.udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.udpSocket.bind((UDPServer.UDP_IP, UDPServer.UDP_PORT))
+        self.udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        #self.udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def run(self):
         while True:
-            self.l.append(1)
-            time.sleep(1)
+            data, address = self.udpSocket.recvfrom(1024)
+            self.processRequest(address, data)
+
+    def getCurrentTime(self):
+        return bytes(time.strftime("%H:%M:%S", time.localtime()), encoding='UTF-8')
+
+    def broadcastTime(self):
+        self.udpSocket.sendto(self.getCurrentTime(), (UDPServer.BROADCAST_ADDRESS, UDPServer.UDP_PORT))
+
+    def sendTime(self, client):
+        self.udpSocket.sendto(self.getCurrentTime(), client)
+
+    def processRequest(self, address, data):
+        if data[0] == UDPServer.MSG_BROADCAST_TIME:
+            print("{}: {} попросил отправить всем время".format(time.ctime(), address))
+            self.broadcastTime()
+        elif data[0] == UDPServer.MSG_SEND_TIME:
+            print("{}: {} попросил отправить себе время".format(time.ctime(), address))
+            self.sendTime(address)
+        else:
+            print("{}: сообщение от {} не распознано\n\tсообщение: {}".format(time.ctime(), address, data))
 
 
-    def getList(self):
-        lock = Lock()
-        lock.acquire()
-        returningList = self.l[:]
-        lock.release()
-        return returningList
-
-
-
-myListener = udpListener()
-myListener.start()
-
-while True:
-    a = input()
-
-    if a == '1':
-        print(myListener.getList())
-
-
-
-            # host = "<broadcast>"
-            # port = 8888
-            # buf = 1024
-            # s = socket(family=AF_INET, type=SOCK_DGRAM)
-            # s.bind(("", 0))
-            # s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
-            # msg = bytes("test", encoding="UTF-8")
-            # s.sendto(msg, (host, port))
-
-            # cs = socket(AF_INET, SOCK_DGRAM)
-            # cs.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-            # cs.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
-            # cs.sendto(b'This is a test', ('192.168.1.255', 8888))
+if __name__ == "__main__":
+    myListener = UDPServer()
+    myListener.start()
