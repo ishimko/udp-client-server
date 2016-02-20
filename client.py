@@ -74,7 +74,7 @@ if __name__ == "__main__":
     client.printHelp()
     client.start()
 
-    userInputCode = 0
+    userInputCode = None
     while userInputCode != UDPClient.MSG_QUIT:
         userInput = input(">>")
         userInputCode = client.processUserRequest(userInput)
