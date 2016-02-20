@@ -15,7 +15,6 @@ class UDPClient(Thread):
 
     def __init__(self):
         super().__init__()
-        self.serverMessages = []
         try:
             self.udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.udpSocket.bind(('', UDPClient.UDP_PORT))
