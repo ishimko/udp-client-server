@@ -10,6 +10,8 @@ class UDPServer(Thread):
     UDP_PORT = 8080
     BROADCAST_ADDRESS = "192.168.56.255"
 
+    BUFFER_SIZE = 512
+
     MSG_SEND_TIME = 0
     MSG_BROADCAST_TIME = 1
 
@@ -26,7 +28,7 @@ class UDPServer(Thread):
     def run(self):
         print("{}: сервер запущен".format(time.ctime()))
         while True:
-            data, address = self.udpSocket.recvfrom(1024)
+            data, address = self.udpSocket.recvfrom(UDPServer.BUFFER_SIZE)
             self.processRequest(address, data)
 
     def getCurrentTime(self):
@@ -57,5 +59,5 @@ class UDPServer(Thread):
 
 
 if __name__ == "__main__":
-    myListener = UDPServer()
-    myListener.start()
+    server = UDPServer()
+    server.start()
