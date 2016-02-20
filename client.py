@@ -37,6 +37,7 @@ class UDPClient(Thread):
     def processUserRequest(self, userInput):
         if not userInput.isnumeric():
             print("Ошибка: введите число!")
+            return
         else:
             userInputCode = int(userInput)
 

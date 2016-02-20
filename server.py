@@ -18,7 +18,6 @@ class UDPServer(Thread):
         self.udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.udpSocket.bind((UDPServer.UDP_IP, UDPServer.UDP_PORT))
         self.udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        #self.udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def run(self):
         while True:
