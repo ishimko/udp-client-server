@@ -9,6 +9,8 @@ class UDPClient(Thread):
     UDP_IP = "192.168.56.1"
     UDP_PORT = 55555
 
+    BUFFER_SIZE = 512
+
     MSG_SEND_TIME = 0
     MSG_BROADCAST_TIME = 1
     MSG_QUIT = 2
@@ -25,7 +27,7 @@ class UDPClient(Thread):
 
     def run(self):
         while True:
-            data, address = self.udpSocket.recvfrom(1024)
+            data, address = self.udpSocket.recvfrom(UDPClient.BUFFER_SIZE)
             self.printServerMessage(data)
 
     def printServerMessage(self, message):
