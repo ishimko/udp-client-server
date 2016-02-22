@@ -48,15 +48,15 @@ class UDPServer(Thread):
         self.sendRequest(self.getCurrentTime(), client)
 
     def processRequest(self, address, data):
-        info = "{}: {}".format((time.ctime(), address[0]))
+        info = "{}: {}".format(time.ctime(), address[0])
         if data[0] == UDPServer.MSG_BROADCAST_TIME:
-            print(info, "попросил отправить всем время", end=" ")
+            print(info, "попросил отправить всем время", sep=" ")
             self.broadcastTime()
         elif data[0] == UDPServer.MSG_SEND_TIME:
-            print(info, "попросил отправить себе время", end=" ")
+            print(info, "попросил отправить себе время", sep=" ")
             self.sendTime(address)
         else:
-            print(info, "прислал не распознаанное сообщение:\n\t{}".format(data), end=" ")
+            print(info, "прислал не распознанное сообщение:\n\t{}".format(data), sep=" ")
 
 
 if __name__ == "__main__":
